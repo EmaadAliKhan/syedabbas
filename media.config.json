@@ -1,0 +1,31 @@
+{
+  "enabled": true,
+  "sourceDir": "media",
+  "outputDir": "public/media",
+  "images": {
+    "maxWidth": 1920,
+    "quality": 82,
+    "webp": false,
+    "pngQuality": 90
+  },
+  "videos": {
+    "enabled": true,
+    "maxWidth": 1080,
+    "crf": 28,
+    "preset": "medium",
+    "posterFrame": "00:00:01"
+  },
+  "mapping": {
+    "0AEAAE9F-3BDB-4755-835A-12AC48BC9A38.jpg": "lifestyle-airplane.jpg",
+    "e7811bb8-2018-40e8-929c-8e8ce10db080.jpg": "brand-shirt-olive.jpg",
+    "IMG_0043.JPG": "fitness-pool.jpg",
+    "IMG_1315.jpg": "event-portrait.jpg",
+    "IMG_1814.PNG": "brand-shirt-mint.png",
+    "IMG_1815.PNG": "brand-shirt-floral.png",
+    "IMG_1817.PNG": "brand-shirt-pink.png",
+    "IMG_1818.PNG": "brand-shirt-luxury.png",
+    "IMG_1082.HEIC": "lifestyle-01.jpg",
+    "df39f37ef4534a1e9a02fe1e07ab1755.mp4": "hero-showreel.mp4",
+    "WhatsApp Video 2026-06-14 at 22.48.42.mp4": "clip-portrait.mp4"
+  }
+}

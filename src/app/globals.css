@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #050505;
+  --color-foreground: #f5f3ef;
+  --color-accent: #e8e4d8;
+  --color-mint: #9ddbb6;
+  --color-muted: #6b6b6b;
+  --color-border: rgba(232, 228, 216, 0.1);
+  --color-surface: rgba(232, 228, 216, 0.04);
+
+  --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --radius-capsule: 9999px;
+  --radius-card: 0.75rem;
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 32s linear infinite;
+}
+
+@layer base {
+  :root {
+    --header-height: 5.5rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-height: 7.5rem;
+    }
+  }
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-mint) 35%, transparent);
+    color: var(--color-foreground);
+  }
+
+  a,
+  button {
+    @apply outline-none;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .label-caps {
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .capsule {
+    border-radius: var(--radius-capsule);
+  }
+
+  .glass {
+    background: rgba(5, 5, 5, 0.88);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+  }
+
+  .vignette {
+    position: relative;
+  }
+
+  .vignette::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(5, 5, 5, 0.55) 100%
+    );
+  }
+
+  .star-field-host {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .page-shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-content {
+    flex: 1;
+  }
+
+  .reveal-mask {
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  .reveal-inner {
+    display: inline-block;
+    will-change: transform;
+  }
+
+  .input-field {
+    @apply w-full border-b border-border bg-transparent py-3 text-sm text-accent outline-none transition placeholder:text-muted focus:border-mint/50;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-accent px-8 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-background transition hover:bg-accent/90 disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-full border border-border px-8 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-accent transition hover:border-mint/40 hover:text-mint;
+  }
+
+  .section-shell {
+    @apply mx-auto max-w-7xl px-5 md:px-10 lg:px-16;
+  }
+
+  .page-offset {
+    padding-top: var(--header-height);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none !important;
+  }
+}
