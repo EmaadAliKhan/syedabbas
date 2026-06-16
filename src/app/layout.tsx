@@ -7,7 +7,9 @@ import StarField from "@/components/ui/StarField";
 import TopBar from "@/components/ui/TopBar";
 import "./globals.css";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://syedabbas.com";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://emaadalikhan.github.io/syedabbas";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

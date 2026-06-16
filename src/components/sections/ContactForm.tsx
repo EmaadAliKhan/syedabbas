@@ -19,13 +19,15 @@ const BUDGET_RANGES = [
   'Flexible / TBD',
 ] as const;
 
+const CONTACT_EMAIL = "abbas.work0007@gmail.com";
+
 export default function ContactForm() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>(
     'idle'
   );
   const [errorMessage, setErrorMessage] = useState('');
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus('loading');
     setErrorMessage('');
@@ -33,38 +35,34 @@ export default function ContactForm() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    const payload = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      company: formData.get('company') || undefined,
-      projectType: formData.get('projectType') || undefined,
-      budget: formData.get('budget') || undefined,
-      dates: formData.get('dates') || undefined,
-      message: formData.get('message'),
-      source: 'contact',
-    };
+    const name = String(formData.get('name') ?? '').trim();
+    const email = String(formData.get('email') ?? '').trim();
+    const company = String(formData.get('company') ?? '').trim();
+    const projectType = String(formData.get('projectType') ?? '').trim();
+    const budget = String(formData.get('budget') ?? '').trim();
+    const dates = String(formData.get('dates') ?? '').trim();
+    const message = String(formData.get('message') ?? '').trim();
 
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+    const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      company ? `Company: ${company}` : '',
+      projectType ? `Project type: ${projectType}` : '',
+      budget ? `Budget: ${budget}` : '',
+      dates ? `Dates: ${dates}` : '',
+      '',
+      message,
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-      const data = await res.json();
+    const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+      `Booking inquiry from ${name}`,
+    )}&body=${encodeURIComponent(body)}`;
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Something went wrong');
-      }
-
-      setStatus('success');
-      form.reset();
-    } catch (err) {
-      setStatus('error');
-      setErrorMessage(
-        err instanceof Error ? err.message : 'Failed to send message'
-      );
-    }
+    window.location.href = mailto;
+    setStatus('success');
+    form.reset();
   }
 
   if (status === 'success') {
@@ -95,10 +93,10 @@ export default function ContactForm() {
           </svg>
         </motion.div>
         <h2 className="mb-2 text-lg font-light tracking-wide text-accent">
-          Message sent
+          Opening your email app
         </h2>
         <p className="mb-8 text-sm text-muted">
-          Thank you for reaching out. Syed will get back to you soon.
+          Send the message from your mail app to complete your inquiry.
         </p>
         <button
           type="button"
@@ -219,7 +217,7 @@ export default function ContactForm() {
         </AnimatePresence>
 
         <button type="submit" disabled={status === 'loading'} className="btn-primary">
-          {status === 'loading' ? 'Sending…' : 'Send Message'}
+          {status === 'loading' ? 'Opening mail…' : 'Send Message'}
         </button>
       </form>
 

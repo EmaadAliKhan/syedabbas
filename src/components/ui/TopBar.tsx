@@ -12,13 +12,12 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
+const CONTACT_EMAIL = "abbas.work0007@gmail.com";
+
 export default function TopBar() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [quickEmail, setQuickEmail] = useState("");
-  const [inquiryState, setInquiryState] = useState<
-    "idle" | "loading" | "sent" | "error"
-  >("idle");
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -27,33 +26,16 @@ export default function TopBar() {
     };
   }, [menuOpen]);
 
-  const handleQuickInquiry = useCallback(async () => {
-    if (inquiryState === "loading" || inquiryState === "sent") return;
-    if (!quickEmail.trim()) return;
+  const handleQuickInquiry = useCallback(() => {
+    const email = quickEmail.trim();
+    if (!email) return;
 
-    setInquiryState("loading");
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: quickEmail.trim(),
-          source: "quick",
-          message: "Quick inquiry from portfolio top bar",
-        }),
-      });
-
-      if (!response.ok) throw new Error("Request failed");
-
-      setInquiryState("sent");
-      setQuickEmail("");
-      window.setTimeout(() => setInquiryState("idle"), 3000);
-    } catch {
-      setInquiryState("error");
-      window.setTimeout(() => setInquiryState("idle"), 3000);
-    }
-  }, [inquiryState, quickEmail]);
+    const body = `Quick inquiry from portfolio top bar.\n\nReply to: ${email}`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+      "Portfolio quick inquiry",
+    )}&body=${encodeURIComponent(body)}`;
+    setQuickEmail("");
+  }, [quickEmail]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -81,19 +63,16 @@ export default function TopBar() {
               value={quickEmail}
               onChange={(e) => setQuickEmail(e.target.value)}
               placeholder="Got an idea for a shoot? Send your e-mail"
-              disabled={inquiryState === "loading" || inquiryState === "sent"}
+              disabled={!quickEmail.trim()}
               className="min-w-0 flex-1 bg-transparent px-2 py-2 text-xs text-accent placeholder:text-muted outline-none"
               aria-label="Your email for quick inquiry"
             />
             <button
               type="submit"
-              disabled={inquiryState === "loading" || !quickEmail.trim()}
+              disabled={!quickEmail.trim()}
               className="tap-target shrink-0 rounded-full bg-accent px-4 py-2 text-[10px] font-medium uppercase tracking-[0.18em] text-background transition hover:bg-accent/90 disabled:opacity-50"
             >
-              {inquiryState === "loading" && "…"}
-              {inquiryState === "sent" && "Sent"}
-              {inquiryState === "error" && "Retry"}
-              {inquiryState === "idle" && "Send"}
+              Send
             </button>
           </form>
 
@@ -215,10 +194,10 @@ export default function TopBar() {
                   />
                   <button
                     type="submit"
-                    disabled={!quickEmail.trim() || inquiryState === "loading"}
+                    disabled={!quickEmail.trim()}
                     className="tap-target w-full rounded-xl bg-accent py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-background disabled:opacity-50"
                   >
-                    {inquiryState === "loading" ? "Sending…" : "Send"}
+                    Send
                   </button>
                 </form>
               </div>
