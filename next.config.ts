@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   output: "export",
   basePath: repoBasePath,
   trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: repoBasePath,
+  },
   images: {
     unoptimized: true,
     formats: ["image/avif", "image/webp"],

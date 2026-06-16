@@ -1,3 +1,5 @@
+import { assetUrl } from "@/lib/asset-url";
+
 export type MediaCategory =
   | "fashion"
   | "fitness"
@@ -26,7 +28,15 @@ export const MEDIA_PIPELINE_NOTES = [
   "hero-showreel-poster.jpg present on disk (placeholder if not extracted via ffmpeg)",
 ] as const;
 
-export const mediaItems: MediaItem[] = [
+function withAssetUrls(item: MediaItem): MediaItem {
+  return {
+    ...item,
+    src: assetUrl(item.src),
+    poster: item.poster ? assetUrl(item.poster) : undefined,
+  };
+}
+
+const rawMediaItems: MediaItem[] = [
   {
     id: "lifestyle-airplane",
     src: "/media/lifestyle-airplane.jpg",
@@ -107,6 +117,8 @@ export const mediaItems: MediaItem[] = [
   },
 ];
 
+export const mediaItems = rawMediaItems.map(withAssetUrls);
+
 export function getMediaById(id: string): MediaItem | undefined {
   return mediaItems.find((item) => item.id === id);
 }
@@ -143,7 +155,7 @@ export const BRANDS = [
 ] as const;
 
 export const HERO_SHOWREEL = {
-  poster: "/media/hero-showreel-poster.jpg",
-  webm: "/media/hero-showreel.webm",
-  mp4: "/media/hero-showreel.mp4",
+  poster: assetUrl("/media/hero-showreel-poster.jpg"),
+  webm: assetUrl("/media/hero-showreel.webm"),
+  mp4: assetUrl("/media/hero-showreel.mp4"),
 } as const;
